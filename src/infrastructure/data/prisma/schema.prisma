@@ -1,0 +1,196 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MYSQL_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String     @unique
+  password  String
+  phone     String?
+  role      Role       @default(CUSTOMER)
+  orders    Order[]
+  payments  Payment[]
+  feedbacks Feedback[]
+  addresses Address[]
+  createdAt DateTime   @default(now())
+}
+
+model Address {
+  id            String     @id
+  label         String
+  street        String
+  regency       String
+  province      String
+  fullAddress   String
+  village       String
+  postalCode    String
+  lat           String?
+  lng           String?
+  distance      Int
+  estimatedTime Int
+  user          User       @relation(fields: [userId], references: [id])
+  userId        Int
+  selected      Boolean
+  createdAt     DateTime   @default(now())
+  shipping      Shipping[]
+  updatedAt     DateTime?
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+model Item {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  price       Decimal
+  category    Category
+  image       String?
+  stock       Int         @default(0)
+  status      Status      @default(AVAILABLE)
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+}
+
+enum Category {
+  COFFEE
+  TEA
+  SNACK
+  DESSERT
+}
+
+enum Status {
+  AVAILABLE
+  OUT_OF_STOCK
+}
+
+model Order {
+  id              Int               @id @default(autoincrement())
+  user            User              @relation(fields: [userId], references: [id])
+  userId          Int
+  totalPrice      Decimal
+  status          OrderStatus       @default(PENDING)
+  payment         Payment[]
+  orderItems      OrderItem[]
+  createdAt       DateTime          @default(now())
+  checkoutSession CheckoutSession[]
+  shipping        Shipping?
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  READY
+  COMPLETED
+}
+
+model OrderItem {
+  id       Int     @id @default(autoincrement())
+  order    Order   @relation(fields: [orderId], references: [id])
+  orderId  Int
+  item     Item    @relation(fields: [itemId], references: [id])
+  itemId   Int
+  quantity Int
+  subtotal Decimal
+}
+
+model Payment {
+  id              String          @id @db.VarChar(255)
+  order           Order           @relation(fields: [orderId], references: [id])
+  orderId         Int
+  user            User            @relation(fields: [userId], references: [id])
+  userId          Int
+  amount          Decimal
+  paymentType     PaymentType
+  paymentStatus   PaymentStatus   @default(PENDING)
+  transactionDate DateTime        @default(now())
+  qris            Qris?
+  virtualAccount  VirtualAccount?
+}
+
+enum PaymentType {
+  CASH
+  CARD
+  ONLINE
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  FAILED
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  rating    Int      @default(5) // 1 to 5 stars
+  comment   String?
+  createdAt DateTime @default(now())
+}
+
+model CheckoutSession {
+  id            Int           @id @default(autoincrement())
+  order         Order         @relation(fields: [orderId], references: [id])
+  orderId       Int
+  sessionToken  String        @unique
+  paymentStatus PaymentStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  expiredAt     DateTime
+}
+
+model Shipping {
+  id        String    @id @db.VarChar(255)
+  note      String    @db.VarChar(255)
+  order     Order     @relation(fields: [orderId], references: [id])
+  orderId   Int       @unique
+  address   Address   @relation(fields: [addressId], references: [id])
+  addressId String    @db.VarChar(255)
+  shippedAt DateTime?
+  arrivedAt DateTime?
+}
+
+model Qris {
+  id                String        @id @db.VarChar(255)
+  transactionTime   DateTime
+  transactionStatus PaymentStatus
+  fraudStatus       Boolean
+  url               String        @db.VarChar(255)
+  qrString          String        @db.VarChar(255)
+  expiredAt         DateTime
+  payment           Payment       @relation(fields: [paymentId], references: [id])
+  paymentId         String        @unique @db.VarChar(255)
+}
+
+enum VirtualAccountStatus {
+  PAID
+  PENDING
+  FAILED
+}
+
+enum BankCode {
+  BNI
+  BCA
+  MANDIRI
+  BRI
+}
+
+model VirtualAccount {
+  id        String               @id @db.VarChar(255)
+  payment   Payment              @relation(fields: [paymentId], references: [id])
+  paymentId String               @unique @db.VarChar(255)
+  vaNumber  String               @db.VarChar(255)
+  createdAt DateTime
+  expiredAt DateTime
+  status    VirtualAccountStatus
+  bankCode  BankCode
+}

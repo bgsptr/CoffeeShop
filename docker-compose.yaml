@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql/mysql-server:8.0
+    container_name: be-cafe-candra-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: cafe_candra
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data-cafe:/var/lib/mysql
+    networks:
+      - cafe-network
+
+  phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - cafe-network
+    ports:
+      - 8002:80
+
+volumes:
+  db-data-cafe:
+
+networks:
+  cafe-network:
