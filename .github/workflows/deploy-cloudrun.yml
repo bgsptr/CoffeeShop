@@ -31,7 +31,7 @@ jobs:
 
     - name: Deploy to Cloud Run
       id: deploy
-      uses: google-github-actions/deploy-cloudrun@v0
+      uses: google-github-actions/deploy-cloudrun@v2
       with:
         service: ${{ vars.SERVICE_NAME }}
         region: ${{ vars.REGION }}
