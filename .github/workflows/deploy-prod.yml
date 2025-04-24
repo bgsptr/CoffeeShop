@@ -15,3 +15,9 @@ jobs:
     with:
       environment: production
       tag: ${{ github.sha }}
+    secrets:
+      WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+      VPC_NETWORK: ${{ secrets.VPC_NETWORK }}
+      VPC_SUBNET: ${{ secrets.VPC_SUBNET }}
+      NETWORK_TAG: ${{ secrets.NETWORK_TAG }}

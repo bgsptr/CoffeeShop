@@ -9,6 +9,22 @@ on:
       tag:
         required: true
         type: string
+    secrets:
+      WORKLOAD_IDENTITY_PROVIDER:
+        required: true
+        type: string
+      SERVICE_ACCOUNT:
+        required: true
+        type: string
+      VPC_NETWORK:
+        required: true
+        type: string
+      VPC_SUBNET:
+        required: true
+        type: string
+      NETWORK_TAG:
+        required: true
+        type: string
 
 jobs:
   deploy-cloudrun:
