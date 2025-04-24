@@ -35,7 +35,9 @@ import { ScheduleModule } from '@nestjs/schedule';
     ConsumerModule,
     ScheduleModule.forRoot(),
     AxiosConfigModule.forRoot(),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
   ],
   exports: [redisProvider, DecimalProvider, GoogleProvider],
   // controllers: [AppController],
