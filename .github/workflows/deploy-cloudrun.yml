@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
     - name: Declare Service
       run: |-
         export CONTAINER_IMAGE=${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID_GCP }}/${{ vars.GCLOUD_ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ inputs.tag }}
