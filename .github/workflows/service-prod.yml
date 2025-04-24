@@ -5,9 +5,6 @@ on:
     branch: main
 
 jobs:
-  build:
-    uses: ./.github/workflows/ci.yml@main
-    
   deploy-prod:
     uses: ./.github/workflows/deploy-cloudrun.yml@main
     with:
