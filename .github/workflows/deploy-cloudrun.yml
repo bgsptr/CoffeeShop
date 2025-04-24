@@ -23,7 +23,7 @@ jobs:
         export VPC_NETWORK="${{ secrets.VPC_NETWORK }}"
         export VPC_SUBNET="${{ secrets.VPC_SUBNET }}"
         export NETWORK_TAG="${{ secrets.NETWORK_TAG }}"
-        envsubst < ./service.yml > container-${{ inputs.environment }}.yaml
+        envsubst < src/deployment/service.yml > container-${{ inputs.environment }}.yaml
         cat container-${{ inputs.environment }}.yaml
 
     - name: Deploy to Cloud Run
