@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy-prod:
-    uses: ./deploy-cloudrun.yml
+    uses: ./.github/workflows/deploy-cloudrun.yml@main
     with:
       environment: production
       tag: ${{ github.sha }}
