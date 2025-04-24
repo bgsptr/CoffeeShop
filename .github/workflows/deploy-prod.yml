@@ -1,9 +1,10 @@
 name: Deploy to Production
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Push to DockerHub and Google Artifact Registry"]
+    types:
+      - completed
 
 permissions:
   contents: read
