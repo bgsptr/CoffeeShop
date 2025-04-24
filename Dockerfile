@@ -10,8 +10,9 @@ COPY . .
 
 WORKDIR /app/src/infrastructure/data/prisma
 RUN npx prisma generate
-RUN npm install -g dotenv-cli
-RUN dotenv -e .env -- npx prisma db push
+# RUN npm install -g dotenv-cli
+# RUN dotenv -e .env -- npx prisma db push
+RUN npx prisma db push
 
 WORKDIR /app
 
