@@ -1,11 +1,12 @@
-name: Cloud Run Deploy Environment
+name: Deploy to Production
 
 on:
   push:
-    branch: main
+    branches:
+      - main
 
 jobs:
-  deploy-prod:
+  deployment:
     uses: ./.github/workflows/deploy-cloudrun.yml@main
     with:
       environment: production
