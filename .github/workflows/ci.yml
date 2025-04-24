@@ -1,0 +1,43 @@
+name: Push to DockerHub and Google Artifact Registry
+
+on:
+  push:
+    branch: main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - name: Docker Hub Auth
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Google Docker Artifact Registry Auth
+        uses: docker/login-action@v3
+        with:
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+          registry: ${{ vars.REGION }}-docker.pkg.dev
+
+      - name: Push to Docker repo
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ vars.DOCKER_IMAGE_URL }}
+            ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID_GCP }}/${{ vars.GCLOUD_ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ inputs.tag }}

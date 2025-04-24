@@ -1,0 +1,12 @@
+name: Cloud Run Deploy Environment
+
+on:
+  push:
+    branch: main
+
+jobs:
+  deploy-prod:
+    uses: ./deploy-cloudrun.yml
+    with:
+      environment: production
+      tag: ${{ github.sha }}

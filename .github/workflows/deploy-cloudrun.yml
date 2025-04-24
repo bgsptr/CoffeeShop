@@ -1,0 +1,38 @@
+name: Deploy Docker Image To Google Cloud Run
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+
+jobs:
+  deploy-cloudrun:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Declare Service
+      run: |-
+        export CONTAINER_IMAGE=${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID_GCP }}/${{ vars.GCLOUD_ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ inputs.tag }}
+        export SERVICE_NAME=${{ vars.SERVICE_NAME }}
+        export REGION="${{ vars.REGION }}"
+        export VPC_NETWORK="${{ secrets.VPC_NETWORK }}"
+        export VPC_SUBNET="${{ secrets.VPC_SUBNET }}"
+        export NETWORK_TAG="${{ secrets.NETWORK_TAG }}"
+        envsubst < ./service.yml > container-${{ inputs.environment }}.yaml
+        cat container-${{ inputs.environment }}.yaml
+
+    - name: Deploy to Cloud Run
+      id: deploy
+      uses: google-github-actions/deploy-cloudrun@v0
+      with:
+        service: ${{ vars.SERVICE_NAME }}
+        region: ${{ vars.REGION }}
+        metadata: container-${{ inputs.environment }}.yaml
+
+    - name: Show output URL
+      run: echo ${{ steps.deploy.outputs.url }}
