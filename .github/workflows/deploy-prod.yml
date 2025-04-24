@@ -5,9 +5,13 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
-  deployment:
-    uses: ./.github/workflows/deploy-cloudrun.yml@main
+  deploy:
+    uses: ./.github/workflows/deploy-cloudrun.yml
     with:
       environment: production
       tag: ${{ github.sha }}
