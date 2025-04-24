@@ -37,6 +37,12 @@ jobs:
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
           registry: ${{ vars.REGION }}-docker.pkg.dev
+      
+      - name: Define .env File
+        run: |
+          touch .env
+          echo "${{ secrets.ENV_FILE }}" > .env
+          cat .env
 
       - name: Push to Docker repo
         uses: docker/build-push-action@v6
@@ -46,14 +52,13 @@ jobs:
           tags: |
             ${{ vars.DOCKER_IMAGE_URL }}
             ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID_GCP }}/${{ vars.GCLOUD_ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}
-          build-args: |
-            MYSQL_URL=${{ secrets.MYSQL_URL }}
-            REDIS_HOST=${{ secrets.REDIS_HOST }}
-            REDIS_PORT=${{ secrets.REDIS_PORT }}
-            REDIS_USERNAME=${{ secrets.REDIS_USERNAME }}
-            REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
-            MIDTRANS_SERVER_KEY=${{ secrets.MIDTRANS_SERVER_KEY }}
-            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
-            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-            DASHBOARD_REDIRECT_URL=${{ secrets.DASHBOARD_REDIRECT_URL }}
-            
+          # build-args: |
+          #   MYSQL_URL=${{ secrets.MYSQL_URL }}
+          #   REDIS_HOST=${{ secrets.REDIS_HOST }}
+          #   REDIS_PORT=${{ secrets.REDIS_PORT }}
+          #   REDIS_USERNAME=${{ secrets.REDIS_USERNAME }}
+          #   REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}
+          #   MIDTRANS_SERVER_KEY=${{ secrets.MIDTRANS_SERVER_KEY }}
+          #   GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+          #   GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+          #   DASHBOARD_REDIRECT_URL=${{ secrets.DASHBOARD_REDIRECT_URL }}
