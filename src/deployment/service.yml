@@ -8,7 +8,7 @@ spec:
   template:
     metadata:
       annotations:
-        autoscaling.knative.dev/maxScale: "100"
+        autoscaling.knative.dev/maxScale: "5"
         run.googleapis.com/network-interfaces: '[{"network":"${VPC_NETWORK}","subnetwork":"${VPC_SUBNET}","tags":["${NETWORK_TAG}"]}]'
         # run.googleapis.com/vpc-access-egress: private-ranges-only
         run.googleapis.com/vpc-access-egress: all-traffic
