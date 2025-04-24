@@ -10,10 +10,12 @@ COPY . .
 
 WORKDIR /app/src/infrastructure/data/prisma
 RUN npx prisma generate
+RUN npx prisma db push
+
 WORKDIR /app
 
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 443
 
 CMD ["npm", "run", "start:prod"]

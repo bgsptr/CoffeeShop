@@ -46,6 +46,11 @@ export class UserController {
     return this.getBiodataUseCase.execute(email);
   }
 
+  @Get('hello-world')
+  helloWorld() {
+    return "Hello World";
+  }
+
   @Post('register')
   registerAccount(@Body() registerDto: RegisterDto) {
     return this.register.execute(registerDto);
