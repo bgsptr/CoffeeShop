@@ -76,4 +76,8 @@ export class OAuth2Google {
 
     return null;
   }
+
+  async getCloudRunUrl() {
+    
+  }
 }
