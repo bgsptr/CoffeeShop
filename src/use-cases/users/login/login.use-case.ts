@@ -44,7 +44,8 @@ export class Login {
 
         const accessToken = jwt.sign(
             { userId: user.id, email: email, role: user.role }, 
-            process.env.SECRET_KEY || "secret", 
+            // process.env.SECRET_KEY || "secret", 
+            "secret", 
             { expiresIn: '1h' }
         );
 
