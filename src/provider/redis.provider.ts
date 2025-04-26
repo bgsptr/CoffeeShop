@@ -1,14 +1,16 @@
 import { Provider } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import Redis from "ioredis";
 
 export const redisProvider: Provider = {
     provide: 'REDIS_CLIENT',
-    useFactory: (): Redis => {
+    inject: [ConfigService],
+    useFactory: (configService: ConfigService): Redis => {
         return new Redis({
-            host: process.env.REDIS_HOST ?? "34.128.113.155",
+            host: configService.get(process.env.REDIS_HOST || ""),
             port: 6379,
-            username: process.env.REDIS_USERNAME ?? "default",
-            password: process.env.REDIS_PASSWORD ?? "putrawanganteng"
+            username: configService.get(process.env.REDIS_USERNAME || ""),
+            password: configService.get(process.env.REDIS_PASSWORD || "")
         });
     }
 }
