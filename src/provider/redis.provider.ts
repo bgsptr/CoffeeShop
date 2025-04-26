@@ -7,10 +7,10 @@ export const redisProvider: Provider = {
     inject: [ConfigService],
     useFactory: (configService: ConfigService): Redis => {
         return new Redis({
-            host: configService.get(process.env.REDIS_HOST || ""),
+            host: configService.get("REDIS_HOST"),
             port: 6379,
-            username: configService.get(process.env.REDIS_USERNAME || ""),
-            password: configService.get(process.env.REDIS_PASSWORD || "")
+            username: configService.get("REDIS_USERNAME"),
+            password: configService.get("REDIS_PASSWORD")
         });
     }
 }
