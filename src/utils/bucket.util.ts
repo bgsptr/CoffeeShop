@@ -5,7 +5,8 @@ export class GoogleCloudBucketUtil {
 
   constructor() {
     this.storage = new Storage({
-      keyFilename: 'D:/.PKL/be-cafe-candra/src/bucket-credential-candra.json'
+      // keyFilename: 'D:/.PKL/be-cafe-candra/src/bucket-credential-candra.json'
+      keyFilename: '/app/bucket-credential-candra.json'
     });
   }
 

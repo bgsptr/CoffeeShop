@@ -38,10 +38,11 @@ jobs:
           password: ${{ steps.auth.outputs.access_token }}
           registry: ${{ vars.REGION }}-docker.pkg.dev
       
-      - name: Define .env File
+      - name: Define .env and Other Credential File
         run: |
-          touch .env
+          touch .env && touch bucket-credential-candra.json
           echo "${{ secrets.ENV_FILE }}" > .env
+          echo "${{ secrets.GCLOUD_BUCKET_CREDENTIAL }}" > bucket-credential-candra.json
           cat .env
 
       - name: Push to Docker repo
