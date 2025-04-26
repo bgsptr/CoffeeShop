@@ -40,10 +40,8 @@ jobs:
       
       - name: Define .env and Other Credential File
         run: |
-          touch .env && touch bucket-credential-candra.json
-          echo "${{ secrets.ENV_FILE }}" > .env
-          echo "${{ secrets.GCLOUD_BUCKET_CREDENTIAL }}" > bucket-credential-candra.json
-          cat .env
+          touch .env && echo "${{ secrets.ENV_FILE }}" > .env
+          touch bucket-credential-candra.json && echo "${{ secrets.GCLOUD_BUCKET_CREDENTIAL }}" > bucket-credential-candra.json
 
       - name: Push to Docker repo
         uses: docker/build-push-action@v6
