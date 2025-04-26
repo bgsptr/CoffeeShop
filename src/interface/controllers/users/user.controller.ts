@@ -61,11 +61,11 @@ export class UserController {
     try {
       const token = await this.login.execute(loginDto);
 
-      res.cookie('token', token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
-      });
+      // res.cookie('token', token, {
+      //   httpOnly: true,
+      //   secure: false,
+      //   sameSite: 'lax',
+      // });
 
       // res.cookie('token', token, {
       //   httpOnly: true,
@@ -151,11 +151,11 @@ export class UserController {
   ) {
     const token = await this.oAuth2Google.saveOAuthToJwtAndRedirect(code);
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-    });
+    // res.cookie('token', token, {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: 'lax',
+    // });
 
     // res.cookie('token', token, {
     //   httpOnly: true,
