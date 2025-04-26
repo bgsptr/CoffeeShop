@@ -61,10 +61,18 @@ export class UserController {
     try {
       const token = await this.login.execute(loginDto);
 
+      // res.cookie('token', token, {
+      //   httpOnly: true,
+      //   secure: false,
+      //   sameSite: 'lax',
+      // });
+
       res.cookie('token', token, {
         httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
+        domain: 'coffeeshop-web-799300494910.asia-southeast2.run.app',
+        path: '/',
       });
 
       const response = new ApiResponse(
@@ -143,10 +151,18 @@ export class UserController {
   ) {
     const token = await this.oAuth2Google.saveOAuthToJwtAndRedirect(code);
 
+    // res.cookie('token', token, {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: 'lax',
+    // });
+
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
+      domain: 'coffeeshop-web-799300494910.asia-southeast2.run.app',
+      path: '/',
     });
 
     // res.redirect('http://localhost:5173/menu');
