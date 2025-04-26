@@ -44,6 +44,7 @@ export class FindOrderUsecase {
             const newItem = items.map((data: Item) => {
                 const orderedItem = itemMap.get(data.id)
                 return {
+                    image: data.image,
                     id: orderedItem?.id,
                     name: data.name,
                     description: data.description,
