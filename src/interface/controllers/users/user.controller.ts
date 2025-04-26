@@ -149,7 +149,8 @@ export class UserController {
       sameSite: 'lax',
     });
 
-    res.redirect('http://localhost:5173/menu');
+    // res.redirect('http://localhost:5173/menu');
+    res.redirect(`https://coffeeshop-web-799300494910.asia-southeast2.run.app/menu`);
   }
 
   // @Put(':email/role')
