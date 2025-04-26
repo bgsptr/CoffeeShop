@@ -14,7 +14,8 @@ async function bootstrap() {
   // }))
   
   app.enableCors({
-    origin: 'http://localhost:5173',
+    // origin: 'http://localhost:5173',
+    origin: 'https://coffeeshop-api-799300494910.asia-southeast2.run.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true
