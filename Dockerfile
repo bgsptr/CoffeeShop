@@ -11,7 +11,7 @@ RUN npm install
 COPY . .
 
 COPY .env .env
-COPY bucket-credential-candra.json ./bucket-credential-candra.json
+COPY bucket-credential-candra.json .
 
 WORKDIR /app/src/infrastructure/data/prisma
 RUN npx prisma generate
