@@ -144,6 +144,8 @@ export class UserController {
     response.send();
   }
 
+  // @Get('oauth2/token')
+
   @Get('auth/google/callback')
   async fetchAuthCodeFromCallbackUrl(
     @Res() res: Response,
@@ -166,7 +168,9 @@ export class UserController {
     // });
 
     // res.redirect('http://localhost:5173/menu');
-    res.redirect(`https://coffeeshop-web-799300494910.asia-southeast2.run.app/menu`);
+    // res.redirect(`https://coffeeshop-web-799300494910.asia-southeast2.run.app/menu`);
+    // res.redirect(`https://coffeeshop-api-799300494910.asia-southeast2.run.app/users/oauth2?token=${token}`);
+    res.redirect(`https://coffeeshop-web-799300494910.asia-southeast2.run.app/google/redirect?token=${token}`);
   }
 
   // @Put(':email/role')
