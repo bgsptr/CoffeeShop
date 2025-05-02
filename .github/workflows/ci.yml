@@ -40,7 +40,7 @@ jobs:
       
       - name: Define .env and Other Credential File
         run: |
-          touch .env && echo "${{ secrets.ENV_FILE }}" > .env
+          touch .env && echo "${{ secrets.ENV_FILE_BACKUP }}" > .env
           echo "${{ secrets.GCLOUD_BUCKET_CREDENTIAL_B64 }}" | base64 --decode > bucket-credential-candra.json
 
       - name: Push to Docker repo

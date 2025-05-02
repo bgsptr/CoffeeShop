@@ -1,5 +1,5 @@
 export const midtrans = {
-    baseUrl: "https://api.sandbox.midtrans.com",
+    baseUrl: process.env.NODE_ENV === "development" ? "https://api.sandbox.midtrans.com" : "https://api.midtrans.com",
     serverKey: process.env.MIDTRANS_SERVER_KEY
 }
 
