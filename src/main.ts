@@ -27,6 +27,6 @@ async function bootstrap() {
   )
 
   //debug
-  await app.listen(process.env.NODE_ENV === "development" ? Number(process.env.PORT) : 443);
+  await app.listen(Number(process.env.PORT) ?? 443);
 }
 bootstrap();
