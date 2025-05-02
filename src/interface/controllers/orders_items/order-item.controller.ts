@@ -51,6 +51,7 @@ export class OrderItemController {
             const response = new ApiResponse(res, HttpStatus.OK, `order with id: ${params.order_item_id} deleted successfully`, {
                 items_remaining: itemsCount
             });
+            
             return response.send();
         } catch(err) {
             if (err instanceof ForbiddenError) {
