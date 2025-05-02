@@ -92,6 +92,15 @@ export class OrderRepository
     })
   }
 
+  async fetchAllOrderByUserIdWithStatusPending(userId: number) {
+    return await this.prisma.order.findMany({
+      where: {
+        userId,
+        status: OrderStatus.PENDING
+      }
+    })
+  }
+
   async getPendingOrdersWithShippingAndAddress() {
     const data = await this.prisma.order.findMany({
       select: {
@@ -121,4 +130,17 @@ export class OrderRepository
   
     return data;
   }
+
+    async rollbackStatusToPendingBatchJob(paymentIds: number[]) {
+      await this.prisma.order.updateMany({
+        where: {
+          id: {
+            in: paymentIds,
+          },
+        },
+        data: {
+          status: OrderStatus.PENDING,
+        },
+      });
+    }
 }

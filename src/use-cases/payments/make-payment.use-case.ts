@@ -39,7 +39,10 @@ export class MakePaymentUsecase {
 
   async execute(paymentDto: PaymentDto, email: string, userId: string) {
     const constants = {
-      SERVER_URL: 'http://localhost:3000',
+      SERVER_URL:
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:3000'
+          : 'https://coffeeshop-api-799300494910.asia-southeast2.run.app',
     };
 
     const { orderId, amount, paymentType, onlineMethod } = paymentDto;
@@ -115,6 +118,9 @@ export class MakePaymentUsecase {
       case PaymentType.CARD.toLowerCase():
         break;
       case PaymentType.CASH.toLowerCase():
+        await this.orderRepository.updateById(orderId, {
+          status: OrderStatus.PREPARING
+        })
         paymentId = await this.paymentRepository.create(paymentEntity);
         break;
       case PaymentType.ONLINE.toLowerCase():
@@ -123,7 +129,7 @@ export class MakePaymentUsecase {
           this.paymentRepository.create(paymentEntity),
           this.orderRepository.updateById(orderId, {
             totalPrice: order.totalPrice,
-            status: OrderStatus.PENDING,
+            status: OrderStatus.PREPARING,
             // if paid online set preparing, otherwise don't update
           }),
         ]);
@@ -138,12 +144,14 @@ export class MakePaymentUsecase {
 
         console.log('select online method');
         if (onlineMethod === 'qris') {
-          const { expiredAt, transactionTime } = await this.midtransUsecase.payWithQris(midtransCharge, paymentId);
+          const { expiredAt, transactionTime } =
+            await this.midtransUsecase.payWithQris(midtransCharge, paymentId);
           await this.redisService.addJob({
             paymentId,
             expiredDate: expiredAt,
-            transactionDate: transactionTime
-          })
+            transactionDate: transactionTime,
+            orderId
+          });
           console.log('qris method here');
         } else if (onlineMethod) {
           await this.midtransUsecase.payWithVirtualAccount(

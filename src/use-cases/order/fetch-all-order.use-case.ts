@@ -6,6 +6,6 @@ export class FetchAllOrderUsecase {
     ) {}
 
     async execute(userId: string) {
-        return await this.orderRepository.fetchAllOrderByUserId(Number(userId));
+        return await this.orderRepository.fetchAllOrderByUserIdWithStatusPending(Number(userId));
     }
 }

@@ -89,4 +89,12 @@ export class OrderItemRepository
       }
     })
   }
+
+  async countItemInCart(orderId: number) {
+    return await this.prisma.orderItem.count({
+      where: {
+        orderId
+      }
+    }) + 1
+  }
 }

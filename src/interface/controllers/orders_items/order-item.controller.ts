@@ -3,6 +3,7 @@ import { Role } from "@prisma/client";
 import { Response } from "express";
 import { FindUserId } from "src/core/domain/decorators/get-user-email.decorator";
 import { Roles } from "src/core/domain/decorators/roles.decorator";
+import { BadRequest } from "src/core/domain/errors/bad-request.error";
 import { ForbiddenError } from "src/core/domain/errors/forbidden.error";
 import { CustomNotFoundError } from "src/core/domain/errors/not-found.error";
 import { RolesGuard } from "src/core/domain/guards/role.guard";
@@ -46,14 +47,18 @@ export class OrderItemController {
         if (!params.order_item_id) return new NotFoundException(`can't find orderitem with id ${params.order_item_id}`);
 
         try {
-            await this.deleteSpecificItemInCart.execute(params.order_item_id, userId);
-            const response = new ApiResponse(res, HttpStatus.OK, `order with id: ${params.order_item_id} deleted successfully`);
+            const itemsCount = await this.deleteSpecificItemInCart.execute(params.order_item_id, userId);
+            const response = new ApiResponse(res, HttpStatus.OK, `order with id: ${params.order_item_id} deleted successfully`, {
+                items_remaining: itemsCount
+            });
             return response.send();
         } catch(err) {
             if (err instanceof ForbiddenError) {
                 throw new ForbiddenException(err?.message);
             } else if (err instanceof CustomNotFoundError) {
                 throw new NotFoundException(err?.message)
+            } else if (err instanceof BadRequest) {
+                throw new BadRequestException(err?.message)
             }
             throw err;
         }
